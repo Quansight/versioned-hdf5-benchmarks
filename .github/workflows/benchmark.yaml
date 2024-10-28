@@ -49,14 +49,14 @@ jobs:
           channels: conda-forge
 
       - name: Install versioned-hdf5
-        working-directory: ./versioned-hdf
+        working-directory: ./versioned-hdf5
         run: |
           conda install -n test pip hdf5 openmpi h5py ndindex -c conda-forge -y
           conda run -n test pip install '.[bench]'
 
       # Compare the most recent commit with the previous one
       - name: Run benchmarks
-        working-directory: ./versioned-hdf
+        working-directory: ./versioned-hdf5
         run: |
           # set the machine name depending on the OS/arch image
           echo "Setting machine name to $RUNNER_NAME"
@@ -82,13 +82,13 @@ jobs:
           conda run -n test asv publish -o ./html
 
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './versioned-hdf5-benchmarks/html'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
