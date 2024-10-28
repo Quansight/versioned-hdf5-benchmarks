@@ -51,6 +51,7 @@ jobs:
       - name: Install versioned-hdf5
         working-directory: ./versioned-hdf5
         run: |
+          echo "PROJECT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           conda install -n test pip hdf5 openmpi h5py ndindex -c conda-forge -y
           conda run -n test pip install '.[bench]'
 
@@ -74,12 +75,12 @@ jobs:
         with:
           cwd: ./versioned-hdf5-benchmarks
           add: .asv/
-          message: "Update benchmarks for commit ${{ github.sha }}"
+          message: "Update benchmarks for commit ${{ env.PROJECT_SHA }}"
 
       - name: Generate html
         working-directory: ./versioned-hdf5-benchmarks
         run: |
-          conda run -n test asv publish -o ./html
+          conda run -n test asv publish --config ../versioned-hdf5/asv.conf.json -o ./html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
