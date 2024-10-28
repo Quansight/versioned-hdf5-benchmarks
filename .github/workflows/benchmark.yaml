@@ -1,0 +1,94 @@
+name: Benchmarks
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+      - cron: "0 5 * * 4"
+
+# Sets permissions of the GITHUB_TOKEN to allow writing back to `master`
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# Cancel in-progress deployment jobs so only the latest one succeeds.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+env:
+  RUNNER_NAME = gcp-n1-standard-8
+
+jobs:
+  run-benchmarks:
+    runs-on: "cirun-benchmark-runner--${{ github.run_id }}"
+    steps:
+      # Install git first; otherwise actions/checkout silently falls back
+      # to github REST API for downloading the repo
+      - name: Install dependencies
+        run: |
+          sudo apt update -y
+          sudo apt install git zlib1g-dev build-essential pkg-config rsync -y
+
+      - uses: actions/checkout@v4
+        with:
+          repository: deshaw/versioned-hdf5
+          path: ./versioned-hdf5/
+
+      - uses: actions/checkout@v4
+        with:
+          path: ./versioned-hdf5-benchmarks/
+
+      - name: Setup python with miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: 3.11
+          channels: conda-forge
+
+      - name: Install versioned-hdf5
+        working-directory: ./versioned-hdf
+        run: |
+          conda install -n test pip hdf5 openmpi h5py ndindex -c conda-forge -y
+          conda run -n test pip install '.[bench]'
+
+      # Compare the most recent commit with the previous one
+      - name: Run benchmarks
+        working-directory: ./versioned-hdf
+        run: |
+          # set the machine name depending on the OS/arch image
+          echo "Setting machine name to $RUNNER_NAME"
+          cat ~/.asv-machine.json
+          conda run -n test asv machine --machine $RUNNER_NAME --yes
+          # Don't return exit code 1 if results are slower
+          conda run -n test asv continuous HEAD^ HEAD || true;
+
+      - name: Copy benchmarks to versioned-hdf5-benchmarks
+        run: |
+          rsync -R ./versioned-hdf5/.asv ./versioned-hdf5-benchmarks/
+
+      - name: Add and commit benchmarks
+        uses: EndBug/add-and-commit@v9
+        with:
+          cwd: ./versioned-hdf5-benchmarks
+          add: .asv/
+          message: "Update benchmarks for commit ${{ github.sha }}"
+
+      - name: Generate html
+        working-directory: ./versioned-hdf5-benchmarks
+        run: |
+          conda run -n test asv publish -o ./html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './versioned-hdf5-benchmarks/html'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
