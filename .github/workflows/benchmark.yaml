@@ -60,8 +60,8 @@ jobs:
         run: |
           # set the machine name depending on the OS/arch image
           echo "Setting machine name to $RUNNER_NAME"
-          cat ~/.asv-machine.json
           conda run -n test asv machine --machine $RUNNER_NAME --yes
+          cat ~/.asv-machine.json
           # Don't return exit code 1 if results are slower
           conda run -n test asv continuous HEAD^ HEAD || true;
 
