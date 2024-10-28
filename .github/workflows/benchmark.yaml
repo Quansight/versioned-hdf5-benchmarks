@@ -37,6 +37,7 @@ jobs:
         with:
           repository: deshaw/versioned-hdf5
           path: ./versioned-hdf5/
+          fetch-depth: 0 # Needed for asv to be able to reference HEAD^
 
       - uses: actions/checkout@v4
         with:
@@ -68,7 +69,10 @@ jobs:
 
       - name: Copy benchmarks to versioned-hdf5-benchmarks
         run: |
+          ls -lash ./versioned-hdf5-benchmarks/.asv || true
           rsync -R ./versioned-hdf5/.asv ./versioned-hdf5-benchmarks/
+          ls -lash ./versioned-hdf5-benchmarks
+          ls -lash ./versioned-hdf5-benchmarks/.asv
 
       - name: Add and commit benchmarks
         uses: EndBug/add-and-commit@v9
