@@ -79,11 +79,10 @@ jobs:
           message: "Update benchmarks for commit ${{ env.PROJECT_SHA }}"
 
       - name: Generate html
-        working-directory: ./versioned-hdf5-benchmarks
+        working-directory: ./versioned-hdf5
         run: |
-          # The output _still_ goes into `versioned-hdf5/html` unless we copy asv.conf.json to
-          # versioned-hdf5-benchmarks
-          cp ../versioned-hdf5/asv.conf.json ./
+          # Copy the old asv results and the new results back into ./versioned-hdf5 for publication
+          rsync -r ../versioned-hdf5-benchmarks/.asv ./
           conda run -n test asv publish -o ./html
 
       - name: Setup Pages
@@ -92,7 +91,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './versioned-hdf5-benchmarks/html'
+          path: './versioned-hdf5/html'
 
       - name: Deploy to GitHub Pages
         id: deployment
