@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-      - cron: "0 5 * * 4"
+    - cron: "0 5 * * 4" # Once a week at 0500 on Thursday
 
 # Sets permissions of the GITHUB_TOKEN to allow writing back to `master`
 permissions:
@@ -37,7 +37,7 @@ jobs:
         with:
           repository: deshaw/versioned-hdf5
           path: ./versioned-hdf5/
-          fetch-depth: 0 # Needed for asv to be able to reference HEAD^
+          fetch-depth: 0 # Needed for asv to be able to run benchmarks on old commits
 
       - uses: actions/checkout@v4
         with:
@@ -56,20 +56,23 @@ jobs:
           conda install -n test pip hdf5 openmpi h5py ndindex -c conda-forge -y
           conda run -n test pip install '.[bench]'
 
-      # Compare the most recent commit with the previous one
       - name: Run benchmarks
         working-directory: ./versioned-hdf5
         run: |
-          # set the machine name according to the runner
+          # Copy the old asv results back into ./versioned-hdf5 to avoid
+          # running old benchmarks again
+          rsync -r ../versioned-hdf5-benchmarks/.asv ./
+
+          # set the machine name; otherwise this is unique to each run
           echo "Setting machine name to $MACHINE_NAME"
           conda run -n test asv machine --machine $MACHINE_NAME --yes -v
           cat ~/.asv-machine.json
+
           # Don't return exit code 1 if results are slower
           conda run -n test asv run --skip-existing --machine $MACHINE_NAME 1.7.0.. || true;
 
-      - name: Copy benchmarks to versioned-hdf5-benchmarks
-        run: |
-          rsync -r ./versioned-hdf5/.asv ./versioned-hdf5-benchmarks/
+          # Copy the new benchmark results to the benchmarks repo to commit them
+          rsync -r .asv ../versioned-hdf5-benchmarks/
 
       - name: Add and commit benchmarks
         uses: EndBug/add-and-commit@v9
@@ -81,8 +84,6 @@ jobs:
       - name: Generate html
         working-directory: ./versioned-hdf5
         run: |
-          # Copy the old asv results and the new results back into ./versioned-hdf5 for publication
-          rsync -r ../versioned-hdf5-benchmarks/.asv ./
           conda run -n test asv publish -o ./html
 
       - name: Setup Pages
