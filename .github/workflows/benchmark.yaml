@@ -65,7 +65,7 @@ jobs:
           conda run -n test asv machine --machine $MACHINE_NAME --yes -v
           cat ~/.asv-machine.json
           # Don't return exit code 1 if results are slower
-          conda run -n test asv continuous --machine $MACHINE_NAME HEAD^ HEAD || true;
+          conda run -n test asv run --skip-existing --machine $MACHINE_NAME 1.7.0.. || true;
 
       - name: Copy benchmarks to versioned-hdf5-benchmarks
         run: |
