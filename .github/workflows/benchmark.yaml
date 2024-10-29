@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUNNER_NAME: gcp-n1-standard-8
+  MACHINE_NAME: gcp-n1-standard-8
 
 jobs:
   run-benchmarks:
@@ -60,19 +60,16 @@ jobs:
       - name: Run benchmarks
         working-directory: ./versioned-hdf5
         run: |
-          # set the machine name depending on the OS/arch image
-          echo "Setting machine name to $RUNNER_NAME"
-          conda run -n test asv machine --machine $RUNNER_NAME --yes
+          # set the machine name according to the runner
+          echo "Setting machine name to $MACHINE_NAME"
+          conda run -n test asv machine --machine $MACHINE_NAME --yes -v
           cat ~/.asv-machine.json
           # Don't return exit code 1 if results are slower
-          conda run -n test asv continuous --machine $RUNNER_NAME HEAD^ HEAD || true;
+          conda run -n test asv continuous --machine $MACHINE_NAME HEAD^ HEAD || true;
 
       - name: Copy benchmarks to versioned-hdf5-benchmarks
         run: |
-          ls -lash ./versioned-hdf5-benchmarks/.asv || true
           rsync -r ./versioned-hdf5/.asv ./versioned-hdf5-benchmarks/
-          ls -lash ./versioned-hdf5-benchmarks
-          ls -lash ./versioned-hdf5-benchmarks/.asv
 
       - name: Add and commit benchmarks
         uses: EndBug/add-and-commit@v9
@@ -84,10 +81,9 @@ jobs:
       - name: Generate html
         working-directory: ./versioned-hdf5-benchmarks
         run: |
+          # The output _still_ goes into `versioned-hdf5/html`...
           conda run -n test asv publish --config ../versioned-hdf5/asv.conf.json -o ./html
-          ls -lash ./
-          ls -lash ../versioned-hdf5/
-          ls -lash ./html
+          cp -r ../versioned-hdf5/html ./
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
