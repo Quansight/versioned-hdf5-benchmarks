@@ -65,12 +65,12 @@ jobs:
           conda run -n test asv machine --machine $RUNNER_NAME --yes
           cat ~/.asv-machine.json
           # Don't return exit code 1 if results are slower
-          conda run -n test asv continuous HEAD^ HEAD || true;
+          conda run -n test asv continuous --machine $RUNNER_NAME HEAD^ HEAD || true;
 
       - name: Copy benchmarks to versioned-hdf5-benchmarks
         run: |
           ls -lash ./versioned-hdf5-benchmarks/.asv || true
-          rsync -R ./versioned-hdf5/.asv ./versioned-hdf5-benchmarks/
+          rsync -r ./versioned-hdf5/.asv ./versioned-hdf5-benchmarks/
           ls -lash ./versioned-hdf5-benchmarks
           ls -lash ./versioned-hdf5-benchmarks/.asv
 
