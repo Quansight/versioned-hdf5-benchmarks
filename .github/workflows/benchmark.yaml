@@ -85,6 +85,9 @@ jobs:
         working-directory: ./versioned-hdf5-benchmarks
         run: |
           conda run -n test asv publish --config ../versioned-hdf5/asv.conf.json -o ./html
+          ls -lash ./
+          ls -lash ../versioned-hdf5/
+          ls -lash ./html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
