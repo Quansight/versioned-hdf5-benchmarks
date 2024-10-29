@@ -81,9 +81,10 @@ jobs:
       - name: Generate html
         working-directory: ./versioned-hdf5-benchmarks
         run: |
-          # The output _still_ goes into `versioned-hdf5/html`...
-          conda run -n test asv publish --config ../versioned-hdf5/asv.conf.json -o ./html
-          cp -r ../versioned-hdf5/html ./
+          # The output _still_ goes into `versioned-hdf5/html` unless we copy asv.conf.json to
+          # versioned-hdf5-benchmarks
+          cp ../versioned-hdf5/asv.conf.json ./
+          conda run -n test asv publish -o ./html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
