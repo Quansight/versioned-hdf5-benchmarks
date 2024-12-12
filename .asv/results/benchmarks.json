@@ -84,7 +84,7 @@
         "warmup_time": -1
     },
     "inmemoryarraydataset.TimeInMemoryArrayDataset.time_getattr": {
-        "code": "class TimeInMemoryArrayDataset:\n    def time_getattr(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert (\n                    isinstance(dataset, InMemoryArrayDataset)\n                    or isinstance(dataset, DatasetWrapper)\n                    and isinstance(dataset.dataset, InMemoryArrayDataset)\n                )\n                dataset[:, 0, 0:6]",
+        "code": "class TimeInMemoryArrayDataset:\n    def time_getattr(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert isinstance(dataset.dataset, InMemoryArrayDataset)\n                dataset[:, 0, 0:6]",
         "min_run_count": 2,
         "name": "inmemoryarraydataset.TimeInMemoryArrayDataset.time_getattr",
         "number": 0,
@@ -96,11 +96,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "3d563ad4ea13a4ccd5785c36efe8de99999dd690c7b2cd49eb2d699d1ceaa238",
+        "version": "1bee567df48d00e0a90bec3be5ad603439b5d1d5adb3b697a4f31d062a0f18aa",
         "warmup_time": -1
     },
     "inmemoryarraydataset.TimeInMemoryArrayDataset.time_resize_bigger": {
-        "code": "class TimeInMemoryArrayDataset:\n    def time_resize_bigger(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert (\n                    isinstance(dataset, InMemoryArrayDataset)\n                    or isinstance(dataset, DatasetWrapper)\n                    and isinstance(dataset.dataset, InMemoryArrayDataset)\n                )\n                dataset.resize((100, 100, 100))",
+        "code": "class TimeInMemoryArrayDataset:\n    def time_resize_bigger(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert isinstance(dataset.dataset, InMemoryArrayDataset)\n                dataset.resize((100, 100, 100))",
         "min_run_count": 2,
         "name": "inmemoryarraydataset.TimeInMemoryArrayDataset.time_resize_bigger",
         "number": 0,
@@ -112,11 +112,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "8c9815a1eaff34fd99c52166db726818c8880872961e5bae41b868377fda7320",
+        "version": "0da5c8ede9ed1afa48e54fa6671ce6f5ca2d6f676bc149aa33a219b0da3bbe8b",
         "warmup_time": -1
     },
     "inmemoryarraydataset.TimeInMemoryArrayDataset.time_resize_smaller": {
-        "code": "class TimeInMemoryArrayDataset:\n    def time_resize_smaller(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert (\n                    isinstance(dataset, InMemoryArrayDataset)\n                    or isinstance(dataset, DatasetWrapper)\n                    and isinstance(dataset.dataset, InMemoryArrayDataset)\n                )\n                dataset.resize((10, 10, 10))",
+        "code": "class TimeInMemoryArrayDataset:\n    def time_resize_smaller(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert isinstance(dataset.dataset, InMemoryArrayDataset)\n                dataset.resize((10, 10, 10))",
         "min_run_count": 2,
         "name": "inmemoryarraydataset.TimeInMemoryArrayDataset.time_resize_smaller",
         "number": 0,
@@ -128,11 +128,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "df669a81fbd57f7fdba2173c805d69f983306e1b94795dd390cffc6c7067602c",
+        "version": "c71d1459ebaa06a38374593d3ece4f84bcc17afe534635c5e0eb60920e27fe99",
         "warmup_time": -1
     },
     "inmemoryarraydataset.TimeInMemoryArrayDataset.time_setattr": {
-        "code": "class TimeInMemoryArrayDataset:\n    def time_setattr(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert (\n                    isinstance(dataset, InMemoryArrayDataset)\n                    or isinstance(dataset, DatasetWrapper)\n                    and isinstance(dataset.dataset, InMemoryArrayDataset)\n                )\n                dataset[:, 0, 0:6] = -1",
+        "code": "class TimeInMemoryArrayDataset:\n    def time_setattr(self):\n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n            with versioned_file.stage_version(\"version1\") as g:\n                dataset = g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n                assert isinstance(dataset.dataset, InMemoryArrayDataset)\n                dataset[:, 0, 0:6] = -1",
         "min_run_count": 2,
         "name": "inmemoryarraydataset.TimeInMemoryArrayDataset.time_setattr",
         "number": 0,
@@ -144,11 +144,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "336e266afec00f5f9645f86d8214397cb0dee382e62cdcf3724b8ad6519997e1",
+        "version": "49ee2719f4ab9daa522500a6e4eaa5055976663bfae7e811f8efd66b421a96f7",
         "warmup_time": -1
     },
     "inmemorydataset.TimeInMemoryDataset.time_getitem": {
-        "code": "class TimeInMemoryDataset:\n    def time_getitem(self):\n        dataset = self.versioned_file[\"version1\"][\"data\"]\n        assert (\n            isinstance(dataset, InMemoryDataset)\n            or isinstance(dataset, DatasetWrapper)\n            and isinstance(dataset.dataset, InMemoryDataset)\n        )\n        dataset[:, 0, 0:6]\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
+        "code": "class TimeInMemoryDataset:\n    def time_getitem(self):\n        dataset = self.versioned_file[\"version1\"][\"data\"]\n        assert isinstance(dataset.dataset, InMemoryDataset)\n        dataset[:, 0, 0:6]\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
         "min_run_count": 2,
         "name": "inmemorydataset.TimeInMemoryDataset.time_getitem",
         "number": 0,
@@ -160,11 +160,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "53f4dbc51c5d4abb3c4a55e97b776bad0e665c4959ca229ab3db2be403e1db78",
+        "version": "1b34b3c4cd5858eb3ccaa0e195d38f954e02a1969682957872bb62e433009eff",
         "warmup_time": -1
     },
     "inmemorydataset.TimeInMemoryDataset.time_resize_bigger": {
-        "code": "class TimeInMemoryDataset:\n    def time_resize_bigger(self):\n        # https://github.com/airspeed-velocity/asv/issues/966\n        self.setup()\n        with self.versioned_file.stage_version(\"version2\") as g:\n            dataset = g[\"data\"]\n            assert (\n                isinstance(dataset, InMemoryDataset)\n                or isinstance(dataset, DatasetWrapper)\n                and isinstance(dataset.dataset, InMemoryDataset)\n            )\n            dataset.resize((100, 100, 100))\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
+        "code": "class TimeInMemoryDataset:\n    def time_resize_bigger(self):\n        # https://github.com/airspeed-velocity/asv/issues/966\n        self.setup()\n        with self.versioned_file.stage_version(\"version2\") as g:\n            dataset = g[\"data\"]\n            assert isinstance(dataset.dataset, InMemoryDataset)\n            dataset.resize((100, 100, 100))\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
         "min_run_count": 2,
         "name": "inmemorydataset.TimeInMemoryDataset.time_resize_bigger",
         "number": 0,
@@ -176,11 +176,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "75a6f6c1782b1b6b440db73133acb802bfa335d2d7e81c91a407caebd80b9911",
+        "version": "ab24f40567b4d16506830b2a496032b9c48e6f8905f0eb64e1cd84cd6bb04bb5",
         "warmup_time": -1
     },
     "inmemorydataset.TimeInMemoryDataset.time_resize_smaller": {
-        "code": "class TimeInMemoryDataset:\n    def time_resize_smaller(self):\n        # https://github.com/airspeed-velocity/asv/issues/966\n        self.setup()\n        with self.versioned_file.stage_version(\"version2\") as g:\n            dataset = g[\"data\"]\n            assert (\n                isinstance(dataset, InMemoryDataset)\n                or isinstance(dataset, DatasetWrapper)\n                and isinstance(dataset.dataset, InMemoryDataset)\n            )\n            dataset.resize((10, 10, 10))\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
+        "code": "class TimeInMemoryDataset:\n    def time_resize_smaller(self):\n        # https://github.com/airspeed-velocity/asv/issues/966\n        self.setup()\n        with self.versioned_file.stage_version(\"version2\") as g:\n            dataset = g[\"data\"]\n            assert isinstance(dataset.dataset, InMemoryDataset)\n            dataset.resize((10, 10, 10))\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
         "min_run_count": 2,
         "name": "inmemorydataset.TimeInMemoryDataset.time_resize_smaller",
         "number": 0,
@@ -192,11 +192,11 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "49f5bafd403bc11c53fb727f5754cb3798378301cc0cfb0cb3c3d10f3e92cb67",
+        "version": "a7f979e3a6b2b06896c3f68c2fb8bba34daf5202617fb92e5fc654bbf4170156",
         "warmup_time": -1
     },
     "inmemorydataset.TimeInMemoryDataset.time_setitem": {
-        "code": "class TimeInMemoryDataset:\n    def time_setitem(self):\n        # https://github.com/airspeed-velocity/asv/issues/966\n        self.setup()\n        with self.versioned_file.stage_version(\"version2\") as g:\n            dataset = g[\"data\"]\n            assert (\n                isinstance(dataset, InMemoryDataset)\n                or isinstance(dataset, DatasetWrapper)\n                and isinstance(dataset.dataset, InMemoryDataset)\n            )\n            dataset[:, 0, 0:6] = -1\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
+        "code": "class TimeInMemoryDataset:\n    def time_setitem(self):\n        # https://github.com/airspeed-velocity/asv/issues/966\n        self.setup()\n        with self.versioned_file.stage_version(\"version2\") as g:\n            dataset = g[\"data\"]\n            assert isinstance(dataset.dataset, InMemoryDataset)\n            dataset[:, 0, 0:6] = -1\n\n    def setup(self):\n        if hasattr(self, \"file\"):\n            self.file.close()\n        if os.path.exists(\"bench.hdf5\"):\n            os.remove(\"bench.hdf5\")\n    \n        with h5py.File(\"bench.hdf5\", \"w\") as f:\n            versioned_file = VersionedHDF5File(f)\n    \n            with versioned_file.stage_version(\"version1\") as g:\n                g.create_dataset(\n                    \"data\",\n                    data=np.arange(10000).reshape((100, 10, 10)),\n                    chunks=(3, 3, 3),\n                )\n    \n        self.file = h5py.File(\"bench.hdf5\", \"a\")\n        self.versioned_file = VersionedHDF5File(self.file)",
         "min_run_count": 2,
         "name": "inmemorydataset.TimeInMemoryDataset.time_setitem",
         "number": 0,
@@ -208,7 +208,7 @@
         "timeout": 1000,
         "type": "time",
         "unit": "seconds",
-        "version": "688976bf02c62d8e584893f3830564c67cb037d41236985158a71cafdea9c05b",
+        "version": "47d01179da6be445e7208065e357d1608eaf0f93de030071768060d074f6258e",
         "warmup_time": -1
     },
     "many_chunks.time_many_chunks": {
