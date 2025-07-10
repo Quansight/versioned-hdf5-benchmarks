@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch: # allows to trigger manually
   schedule:
     - cron: "0 5 * * 4" # Once a week at 0500 on Thursday
 
@@ -31,13 +35,17 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update -y
-          sudo apt install git zlib1g-dev build-essential pkg-config rsync -y
+          sudo apt install git zlib1g-dev build-essential pkg-config rsync lsof -y
 
       - uses: actions/checkout@v4
         with:
           repository: deshaw/versioned-hdf5
           path: ./versioned-hdf5/
-          fetch-depth: 0 # Needed for asv to be able to run benchmarks on old commits
+          fetch-depth: 0  # Needed for asv to be able to run benchmarks on old commits
+
+      - name: Get commit hash
+        working-directory: ./versioned-hdf5
+        run: echo "PROJECT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
         with:
@@ -52,9 +60,17 @@ jobs:
       - name: Install versioned-hdf5
         working-directory: ./versioned-hdf5
         run: |
-          echo "PROJECT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           conda install -n test pip hdf5 openmpi h5py ndindex -c conda-forge -y
           conda run -n test pip install '.[bench]'
+
+      - name: Dump conda environment
+        run: conda list -n test
+
+      - name: Print hdf5 configuration
+        working-directory: ./versioned-hdf5-benchmarks
+        run: |
+            conda run -n test python -c 'import utils; utils.debug_libhdf5_so()'
+            conda run -n test h5cc -showconfig
 
       - name: Run benchmarks
         working-directory: ./versioned-hdf5
@@ -75,6 +91,7 @@ jobs:
           rsync -r .asv ../versioned-hdf5-benchmarks/
 
       - name: Add and commit benchmarks
+        if: github.event_name != 'pull_request'
         uses: EndBug/add-and-commit@v9
         with:
           cwd: ./versioned-hdf5-benchmarks
@@ -83,8 +100,7 @@ jobs:
 
       - name: Generate html
         working-directory: ./versioned-hdf5
-        run: |
-          conda run -n test asv publish -o ./html
+        run: conda run -n test asv publish -o ./html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -92,8 +108,10 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './versioned-hdf5/html'
+          path: ./versioned-hdf5/html
+          retention-days: 30
 
       - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
         id: deployment
         uses: actions/deploy-pages@v4
